@@ -1,1 +1,1 @@
-# Large-scale-Drone-Perception
+# Pumpkin-counting-miniproject
