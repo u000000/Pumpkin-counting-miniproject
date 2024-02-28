@@ -70,11 +70,11 @@ def main():
 
     cv2.imwrite(path+'/worked_img/annotated_pumkin_color.jpg', color_mask)
 
-    b, g, r = cv2.split(img)
+    b, g, r = cv2.split(color_mask)
     fig = plt.figure()
     axis = fig.add_subplot(1, 1, 1, projection="3d")
 
-    pixel_colors = cv2.cvtColor(img,cv2.COLOR_BGR2RGB).reshape((np.shape(img))[0]*np.shape(img)[1], 3)
+    pixel_colors = cv2.cvtColor(color_mask,cv2.COLOR_BGR2RGB).reshape((np.shape(color_mask))[0]*np.shape(color_mask)[1], 3)
     norm = colors.Normalize(vmin=-1.,vmax=1.)
     norm.autoscale(pixel_colors)
     pixel_colors = norm(pixel_colors).tolist()
@@ -83,7 +83,7 @@ def main():
     axis.set_xlabel("Red")
     axis.set_ylabel("Green")
     # axis.set_zlabel("Blue")
-    plt.show()
+    # plt.show()
     plt.savefig(path+'/worked_img/StandardDeviationOfColorValues.png')
     print('BRG done!')
 

@@ -40,12 +40,14 @@ def main():
 
     cv2.imwrite('worked_img/annotated_pumkin_color.jpg', color_mask)
 
-
-    r, g, b = cv2.split(img)
+    # print(np.shape(img))
+    # print(np.shape(img[[mask]]))
+    # exit()
+    r, g, b = cv2.split(color_mask)
     fig = plt.figure()
     axis = fig.add_subplot(1, 1, 1, projection="3d")
 
-    pixel_colors = img.reshape((np.shape(img)[0]*np.shape(img)[1], 3))
+    pixel_colors = color_mask.reshape((np.shape(color_mask)[0]*np.shape(color_mask)[1], 3))
     norm = colors.Normalize(vmin=-1.,vmax=1.)
     norm.autoscale(pixel_colors)
     pixel_colors = norm(pixel_colors).tolist()
