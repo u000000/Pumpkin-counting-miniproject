@@ -44,37 +44,39 @@ def annotate(img):
 
 
 def main():
-    img = cv2.imread('Images for first miniproject/EB-02-660_0595_0414.JPG')
+    img = cv2.imread('EB-02-660_0595_0414.JPG')
     assert img is not None, "Failed to load image."
     #pixels = np.reshape(img, (-1, 3))
     img_annotated = cv2.imread('EB-02-660_0595_0414_mask.JPG')
     
     mask = cv2.inRange(img_annotated, (0, 0, 200), (5, 5, 255))
     #mask_pixels = np.reshape(mask, (-1))
-    cv2.imwrite('worked_img/annotated_pumkin.jpg', mask)
+    cv2.imwrite('/home/u000000/2_Semester/Pumpkin-counting-miniproject/worked_img/annotated_pumkin.jpg', mask)
 
     # Determine mean value, standard deviations and covariance matrix
     # for the annotated pixels.
     # Using cv2 to calculate mean and standard deviations
-    mean, std = cv2.meanStdDev(img, mask = mask)
+    mean_bgr, std_bgr = cv2.meanStdDev(img, mask = mask)
     print("rgb")
     print("Mean color values of the annotated pixels")
-    print(mean)
+    print(mean_bgr)
     print("Standard deviation of color values of the annotated pixels")
-    print(std)
+    print(std_bgr)
 
+
+    # CIE L*a*b
     labimg = cv2.cvtColor(img,cv2.COLOR_BGR2Lab)
 
     print("lab")
-    mean, std = cv2.meanStdDev(labimg, mask = mask)
+    mean_lab, std_lab = cv2.meanStdDev(labimg, mask = mask)
     print("Mean color values of the annotated pixels")
-    print(mean)
+    print(mean_lab)
     print("Standard deviation of color values of the annotated pixels")
-    print(std)
+    print(std_lab)
 
     color_mask = cv2.bitwise_and(img,img,mask=mask)
 
-    cv2.imwrite('worked_img/annotated_pumkin_color.jpg', color_mask)
+    cv2.imwrite('/home/u000000/2_Semester/Pumpkin-counting-miniproject/worked_img/annotated_pumkin_color.jpg', color_mask)
 
 
     r, g, b = cv2.split(img)
@@ -91,8 +93,7 @@ def main():
     axis.set_ylabel("Green")
     # axis.set_zlabel("Blue")
     #plt.show()
-
-
-
+    plt.savefig('/home/u000000/2_Semester/Pumpkin-counting-miniproject/worked_img/StandardDeviationOfColorValues.png')
+    print('done!')
 
 main()
