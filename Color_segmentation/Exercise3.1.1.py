@@ -96,7 +96,7 @@ def main():
     axis.set_ylabel("Green")
     # axis.set_zlabel("Blue")
     #plt.show()
-    plt.savefig('/home/u000000/2_Semester/Pumpkin-counting-miniproject/worked_img/StandardDeviationOfColorValues.png')
+    plt.savefig(path+'/worked_img/StandardDeviationOfColorValues.png')
     print('done!')
 
 main()
