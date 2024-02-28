@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib import colors
+import os
 
 
 def annotate(img):
@@ -44,14 +45,16 @@ def annotate(img):
 
 
 def main():
-    img = cv2.imread('Images for first miniproject/EB-02-660_0595_0414.JPG')
+    path = os.path.dirname(__file__)
+    print(path+'/EB-02-660_0595_0414.JPG')
+    img = cv2.imread(path+'/EB-02-660_0595_0414.JPG')
     assert img is not None, "Failed to load image."
     #pixels = np.reshape(img, (-1, 3))
-    img_annotated = cv2.imread('EB-02-660_0595_0414_mask.JPG')
+    img_annotated = cv2.imread(path+'/EB-02-660_0595_0414_mask.JPG')
     
     mask = cv2.inRange(img_annotated, (0, 0, 200), (5, 5, 255))
     #mask_pixels = np.reshape(mask, (-1))
-    cv2.imwrite('worked_img/annotated_pumkin.jpg', mask)
+    cv2.imwrite(path+'/worked_img/annotated_pumkin.jpg', mask)
 
     # Determine mean value, standard deviations and covariance matrix
     # for the annotated pixels.
@@ -74,7 +77,7 @@ def main():
 
     color_mask = cv2.bitwise_and(img,img,mask=mask)
 
-    cv2.imwrite('worked_img/annotated_pumkin_color.jpg', color_mask)
+    cv2.imwrite(path+'/worked_img/annotated_pumkin_color.jpg', color_mask)
 
 
     r, g, b = cv2.split(img)
