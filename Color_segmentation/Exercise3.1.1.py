@@ -66,21 +66,9 @@ def main():
     print("Standard deviation of color values of the annotated pixels")
     print(std_bgr)
 
-
-    # CIE L*a*b
-    labimg = cv2.cvtColor(img,cv2.COLOR_BGR2Lab)
-
-    print("lab")
-    mean_lab, std_lab = cv2.meanStdDev(labimg, mask = mask)
-    print("Mean color values of the annotated pixels")
-    print(mean_lab)
-    print("Standard deviation of color values of the annotated pixels")
-    print(std_lab)
-
     color_mask = cv2.bitwise_and(img,img,mask=mask)
 
     cv2.imwrite(path+'/worked_img/annotated_pumkin_color.jpg', color_mask)
-
 
     r, g, b = cv2.split(img)
     fig = plt.figure()
@@ -97,6 +85,28 @@ def main():
     # axis.set_zlabel("Blue")
     #plt.show()
     plt.savefig(path+'/worked_img/StandardDeviationOfColorValues.png')
-    print('done!')
+    print('BRG done!')
+
+
+
+    # CIE L*a*b
+    labimg = cv2.cvtColor(img,cv2.COLOR_BGR2Lab)
+
+    print("lab")
+    mean_lab, std_lab = cv2.meanStdDev(labimg, mask = mask)
+    print("Mean color values of the annotated pixels")
+    print(mean_lab)
+    print("Standard deviation of color values of the annotated pixels")
+    print(std_lab)
+
+    color_mask_lab = cv2.bitwise_and(labimg,labimg,mask=mask)
+
+    cv2.imwrite(path+'/worked_img/annotated_pumkin_color_lab.jpg', color_mask_lab)
+    
+    
+
+
+
+
 
 main()
