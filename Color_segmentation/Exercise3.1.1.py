@@ -70,20 +70,41 @@ def main():
 
     cv2.imwrite(path+'/worked_img/annotated_pumkin_color.jpg', color_mask)
 
-    b, g, r = cv2.split(color_mask)
+    # b, g, r = cv2.split(color_mask)
+    flat_color_mask = color_mask.reshape((np.shape(color_mask))[0]*np.shape(color_mask)[1], 3)
+    flat_mask = mask.reshape((np.shape(mask))[0]*np.shape(mask)[1])
+    bool_mask = np.array(flat_mask, dtype=bool)
+    bool_mask_inv = np.invert(bool_mask)
+
+    only_color = np.delete(flat_color_mask,bool_mask_inv,0)
+
+    only_color_rot = np.rot90(only_color)
+    b, g, r = [only_color_rot[0],only_color_rot[1],only_color_rot[2]]
     fig = plt.figure()
     axis = fig.add_subplot(1, 1, 1, projection="3d")
 
-    pixel_colors = cv2.cvtColor(color_mask,cv2.COLOR_BGR2RGB).reshape((np.shape(color_mask))[0]*np.shape(color_mask)[1], 3)
+    only_color = only_color.reshape(np.shape(only_color)[0],1,3)
+    print(np.shape(only_color))
+
+    pixel_colors = cv2.cvtColor(only_color,cv2.COLOR_BGR2RGB)
     norm = colors.Normalize(vmin=-1.,vmax=1.)
     norm.autoscale(pixel_colors)
     pixel_colors = norm(pixel_colors).tolist()
 
+    pixel_colors = np.squeeze(pixel_colors)
+
+
+    print(np.shape(b))
+    print(np.shape(g))
+    print(np.shape(r))
+    print(np.shape(pixel_colors))
+    # exit()
+    
     axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
     axis.set_xlabel("Red")
     axis.set_ylabel("Green")
     # axis.set_zlabel("Blue")
-    # plt.show()
+    plt.show()
     plt.savefig(path+'/worked_img/StandardDeviationOfColorValues.png')
     print('BRG done!')
 
