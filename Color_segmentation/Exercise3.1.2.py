@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib import colors
+import math
 import os
 
 def main():
@@ -36,14 +37,23 @@ def main():
     print("Standard deviation of color values of the annotated pixels")
     print(std)
 
+    
     color_mask = cv2.bitwise_and(img,img,mask=mask)
-
-    cv2.imwrite('worked_img/annotated_pumkin_color.jpg', color_mask)
+    cv2.imwrite(path+'worked_img/annotated_pumkin_color.jpg', color_mask)
 
     # print(np.shape(img))
     # print(np.shape(img[[mask]]))
     # exit()
     r, g, b = cv2.split(color_mask)
+    
+    #distance in color code
+    ref_color_r = 255
+    ref_color_g = 165
+    ref_color_b = 0
+
+    eclidian_dist=math.sqrt((ref_color_r - r)^2 + (ref_color_g - g)^2 + (ref_color_b - b)^2)
+    print(eclidian_dist)
+
     fig = plt.figure()
     axis = fig.add_subplot(1, 1, 1, projection="3d")
 
@@ -56,7 +66,8 @@ def main():
     axis.set_xlabel("Red")
     axis.set_ylabel("Green")
     # axis.set_zlabel("Blue")
-    #plt.show()
+    plt.show()
+
 
 
 
