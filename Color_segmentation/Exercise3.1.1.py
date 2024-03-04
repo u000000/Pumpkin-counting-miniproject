@@ -7,42 +7,6 @@ from matplotlib import colors
 import os
 
 
-def annotate(img):
-
-    #setup blob detector
-    params = cv2.SimpleBlobDetector_Params()
- 
-    # Change thresholds
-    params.minThreshold = 10
-    params.maxThreshold = 200
-    
-    # Filter by Area.
-    params.filterByArea = True
-    params.minArea = 1500
-    
-    # Filter by Circularity
-    params.filterByCircularity = True
-    params.minCircularity = 0.1
-    
-    # Filter by Convexity
-    params.filterByConvexity = True
-    params.minConvexity = 0.87
-    
-    # Filter by Inertia
-    params.filterByInertia = True
-    params.minInertiaRatio = 0.01
-
-    detector = cv2.SimpleBlobDetector(params)
-    print("test2")
-
-    keypoints = detector.detect(img)
-    print("test2.5")
-    img_annotated = cv2.drawKeypoints(img,keypoints, np.array([]), (0, 160, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    print("test3")
-    # Show annotated img
-    cv2.imshow("Keypoints", img_annotated)
-    return img_annotated
-
 
 def main():
     path = os.path.dirname(__file__)
@@ -111,6 +75,41 @@ def main():
 
 
     # # CIE L*a*b
+
+
+    labimg = cv2.cvtColor(img,cv2.COLOR_BGR2Lab)
+
+    print("lab")
+    mean, std = cv2.meanStdDev(labimg, mask = mask)
+    print("Mean color values of the annotated pixels")
+    print(mean)
+    print("Standard deviation of color values of the annotated pixels")
+    print(std)
+
+    
+    color_mask = cv2.bitwise_and(img,img,mask=mask)
+    cv2.imwrite(path+'worked_img/annotated_pumkin_color.jpg', color_mask)
+
+    # print(np.shape(img))
+    # print(np.shape(img[[mask]]))
+    # exit()
+    r, g, b = cv2.split(color_mask)
+
+    fig = plt.figure()
+    axis = fig.add_subplot(1, 1, 1, projection="3d")
+
+    pixel_colors = color_mask.reshape((np.shape(color_mask)[0]*np.shape(color_mask)[1], 3))
+    norm = colors.Normalize(vmin=-1.,vmax=1.)
+    norm.autoscale(pixel_colors)
+    pixel_colors = norm(pixel_colors).tolist()
+
+    axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
+    axis.set_xlabel("Red")
+    axis.set_ylabel("Green")
+    # axis.set_zlabel("Blue")
+    plt.show()
+
+
     # labimg = cv2.cvtColor(img,cv2.COLOR_BGR2Lab)
 
     # print("lab")

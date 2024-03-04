@@ -17,58 +17,34 @@ def main():
     mask = cv2.inRange(img_annotated, (0, 0, 200), (5, 5, 255))
     #mask_pixels = np.reshape(mask, (-1))
     cv2.imwrite(path+'/worked_img/annotated_pumkin.jpg', mask)
+   
+    pixel_array = np.reshape(img, (-1,3))
+    mask_array = np.reshape(mask, (-1,3))
 
-    # Determine mean value, standard deviations and covariance matrix
-    # for the annotated pixels.
-    # Using cv2 to calculate mean and standard deviations
-    mean, std = cv2.meanStdDev(img, mask = mask)
-    print("rgb")
-    print("Mean color values of the annotated pixels")
-    print(mean)
-    print("Standard deviation of color values of the annotated pixels")
-    print(std)
-
-    labimg = cv2.cvtColor(img,cv2.COLOR_BGR2Lab)
-
-    print("lab")
-    mean, std = cv2.meanStdDev(labimg, mask = mask)
-    print("Mean color values of the annotated pixels")
-    print(mean)
-    print("Standard deviation of color values of the annotated pixels")
-    print(std)
-
-    
-    color_mask = cv2.bitwise_and(img,img,mask=mask)
-    cv2.imwrite(path+'worked_img/annotated_pumkin_color.jpg', color_mask)
-
-    # print(np.shape(img))
-    # print(np.shape(img[[mask]]))
-    # exit()
-    r, g, b = cv2.split(color_mask)
-    
     #distance in color code
     ref_color_r = 255
     ref_color_g = 165
     ref_color_b = 0
 
-    eclidian_dist=math.sqrt((ref_color_r - r)^2 + (ref_color_g - g)^2 + (ref_color_b - b)^2)
-    print(eclidian_dist)
-
-    fig = plt.figure()
-    axis = fig.add_subplot(1, 1, 1, projection="3d")
-
-    pixel_colors = color_mask.reshape((np.shape(color_mask)[0]*np.shape(color_mask)[1], 3))
-    norm = colors.Normalize(vmin=-1.,vmax=1.)
-    norm.autoscale(pixel_colors)
-    pixel_colors = norm(pixel_colors).tolist()
-
-    axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
-    axis.set_xlabel("Red")
-    axis.set_ylabel("Green")
-    # axis.set_zlabel("Blue")
-    plt.show()
-
-
+    print(pixel_array)
+    #print(mask_array)
+    max_dist = 0
+    min_dist = 255
+    print("to loop")
+    n = 0
+    for x in pixel_array:
+        #print(x)
+        eclidian_dist=math.sqrt((ref_color_r - pixel_array[n][0])**2 + (ref_color_g - pixel_array[n][1])**2 + (ref_color_b - pixel_array[n][2])**2)
+        if eclidian_dist > max_dist:
+            max_dist = eclidian_dist
+        
+        if eclidian_dist < min_dist:
+            min_dist = eclidian_dist
+        n+=1
+    print(min_dist)    
+    print(max_dist)
+    print("num of itterations")
+    print(n)
 
 
 
