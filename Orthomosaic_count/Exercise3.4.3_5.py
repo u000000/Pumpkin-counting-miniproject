@@ -44,7 +44,6 @@ class tile_maneger:
         is_last = False
         if (self.y > self.nrows):
                 raise "no more tiles"
-        # print(f"x:{self.x}  y:{self.y}")
 
         window = Window.from_slices(slice(self.y, self.y+self.tile_height),slice(self.x,self.x+self.tile_width))
         # window_transform = transform(window, self.file.transform)
@@ -58,6 +57,9 @@ class tile_maneger:
             self.x = 0
             self.y = self.y + self.ystep
 
+
+        print(f"width:{self.ncols}  height:{self.nrows}")
+        print(f"x:{self.x}  y:{self.y}")
 
         if (self.y > self.nrows):
             is_last = True
