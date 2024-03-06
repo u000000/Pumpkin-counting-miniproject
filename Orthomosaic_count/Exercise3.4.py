@@ -52,14 +52,17 @@ class tile_maneger:
         data = self.file.read(window=window,boundless=True)
 
 
-        if (self.y + self.tile_height > self.nrows):
-            is_last = True
 
         if (self.x + self.xstep < self.ncols):
             self.x = self.x + self.xstep
         else:
             self.x = 0
             self.y = self.y + self.ystep
+
+
+        if (self.y > self.nrows):
+            is_last = True
+        
         return data,is_last
     
 
@@ -70,7 +73,7 @@ if __name__ == "__main__" :
     file = os.path.join(path,"../othomosaics/pumkin_filed.tif")
 
 
-    img = tile_maneger(file,1000,1000,300)
+    img = tile_maneger(file,1000,1000,50)
     print(img.get_total_tile_count())
     for i in range(img.get_total_tile_count()-2):
         [data,v] = img.get_next_tile()
@@ -83,25 +86,6 @@ if __name__ == "__main__" :
     cv.imshow("img",img_array)
     cv.waitKey(0)
 
-    #     tile_x = O_file.width
-    #     tile_y = O_file.height
-    #     overlap = 50
-    #     metadata = O_file.meta.copy()
-
-
-    #     col_start = 0
-    #     row_start = 0
-    #     col2 = O_file.width/2
-    #     row2 = O_file.height/2
-    #     col_end = O_file.width
-    #     row_end = O_file.height   
-
-    # # #not done
-    #     twindow = Window.from_slices(slice(row2,row_end), slice(col2,col_end))
-    #     print(twindow)
-
-        # data = O_file.read(window=window)
- 
 
 
 

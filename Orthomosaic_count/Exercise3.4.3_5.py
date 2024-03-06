@@ -52,14 +52,17 @@ class tile_maneger:
         data = self.file.read(window=window,boundless=True)
 
 
-        if (self.y + self.tile_height > self.nrows):
-            is_last = True
-
         if (self.x + self.xstep < self.ncols):
             self.x = self.x + self.xstep
         else:
             self.x = 0
             self.y = self.y + self.ystep
+
+
+        if (self.y > self.nrows):
+            is_last = True
+
+
         return data,is_last
     
 
