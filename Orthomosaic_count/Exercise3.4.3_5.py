@@ -57,9 +57,8 @@ class tile_maneger:
             self.x = 0
             self.y = self.y + self.ystep
 
-
-        print(f"width:{self.ncols}  height:{self.nrows}")
-        print(f"x:{self.x}  y:{self.y}")
+        #print(f"width:{self.ncols}  height:{self.nrows}")
+        #print(f"x:{self.x}  y:{self.y}")
 
         if (self.y > self.nrows):
             is_last = True
