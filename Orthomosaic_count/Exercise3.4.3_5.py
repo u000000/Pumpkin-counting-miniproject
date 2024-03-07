@@ -6,6 +6,7 @@ from rasterio.windows import Window,transform
 from rasterio import DatasetReader
 import os
 from typing import Tuple
+from math import sqrt
 
 
 
@@ -58,8 +59,8 @@ class tile_maneger:
             self.y = self.y + self.ystep
 
 
-        print(f"width:{self.ncols}  height:{self.nrows}")
-        print(f"x:{self.x}  y:{self.y}")
+        # print(f"width:{self.ncols}  height:{self.nrows}")
+        # print(f"x:{self.x}  y:{self.y}")
 
         if (self.y > self.nrows):
             is_last = True
@@ -67,6 +68,52 @@ class tile_maneger:
 
         return data,is_last
     
+def inEclidianDist(img,mean,max_dist):
+    
+    [l,a,b] = cv.split(img)
+    l = l - mean[0]
+    a = a - mean[1]
+    b = b - mean[2] 
+
+    eclidian_dist = np.sqrt(l*l + a*a + b*b)
+    
+    return cv.inRange(eclidian_dist,0,max_dist)
+
+
+def count_pumkins(img) -> int:
+
+    img = cv.cvtColor(img,cv.COLOR_BGR2Lab)
+    # Masking
+    # mask = cv.inRange(img, lower_pumpkin, upper_pumpkin)
+    mask = inEclidianDist(img, [225.69843634,128.99106478,176.34921817,], 20)
+
+    # Mask on original img
+    # img_masked = cv.bitwise_and(img, img, mask=mask)
+
+    """# filtering """
+    img_dil = cv.dilate(mask, np.ones((7, 7), np.uint8))
+
+    img_ero = cv.erode(img_dil, np.ones((5, 5), np.uint8))
+
+
+
+    """# counting pumpkins """
+    conts, hierarchy = cv.findContours(img_ero, cv.RETR_LIST ,cv.CHAIN_APPROX_SIMPLE)
+    cv.drawContours(img, conts, -1, (255, 0, 0), 1)
+
+    number_of_pumpkins = 0
+    centers = []
+    for cont in conts:
+        M = cv.moments(cont)
+        x0 = int(M['m10']/M['m00'])
+        y0 = int(M['m01']/M['m00'])
+        centers.append((x0, y0))
+        # if cv.contourArea(cont) > 900:
+        #     number_of_pumpkins += 2
+        # else:
+        number_of_pumpkins += 1
+
+    return number_of_pumpkins
 
 if __name__ == "__main__" :
     
@@ -81,42 +128,15 @@ if __name__ == "__main__" :
 
     number_of_pumpkins = 0
 
-    img_full = tile_maneger(file,1000,1000,50)
-    n = 0
+    img_full = tile_maneger(file,1000,1000,0)
+
     while not last_tile:
-        print("in loop")
-        print(n)
-        n +=1
         [tile,last_tile] = img_full.get_next_tile()
 
         img_array = np.transpose(tile, (1, 2, 0))
         img = cv.cvtColor(img_array,cv.COLOR_RGB2BGR)
 
-        # Masking
-        mask = cv.inRange(img, lower_pumpkin, upper_pumpkin)
-
-        # Mask on original img
-        img_masked = cv.bitwise_and(img, img, mask=mask)
-
-        """# filtering """
-        img_dil = cv.dilate(mask, np.ones((7, 7), np.uint8))
-
-        img_ero = cv.erode(img_dil, np.ones((5, 5), np.uint8))
-
-        """# counting pumpkins """
-        conts, hierarchy = cv.findContours(img_ero, cv.RETR_LIST ,cv.CHAIN_APPROX_SIMPLE)
-        cv.drawContours(img, conts, -1, (255, 0, 0), 1)
-
-        centers = []
-        for cont in conts:
-            M = cv.moments(cont)
-            x0 = int(M['m10']/M['m00'])
-            y0 = int(M['m01']/M['m00'])
-            centers.append((x0, y0))
-            if cv.contourArea(cont) > 900:
-                number_of_pumpkins += 2
-            else:
-                number_of_pumpkins += 1
+        number_of_pumpkins += count_pumkins(img)
 
     print("num of pumpkins")
     print(number_of_pumpkins)
