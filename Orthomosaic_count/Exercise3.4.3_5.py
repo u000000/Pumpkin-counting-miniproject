@@ -58,7 +58,7 @@ class tile_maneger:
             is_last = True
 
 
-        return data,is_last,tile
+        return data,is_last
     
 def inEclidianDist(img,mean,max_dist):
     
@@ -104,11 +104,15 @@ def count_pumkins(img) -> int:
     img_dil = cv.dilate(img_ero, np.ones((7, 7), np.uint8))
  
 
-    cv.imshow("img",cv.cvtColor(img,cv.COLOR_Lab2BGR))
-    cv.imshow("mask",mask)
-    cv.imshow("img_dil",img_dil)
-    cv.imshow("img_ero",img_ero)
-    cv.waitKey(0)
+    # cv.imshow("img",cv.cvtColor(img,cv.COLOR_Lab2BGR))
+    # cv.resizeWindow('img', 600,600)
+    # cv.imshow("mask",mask)
+    # cv.resizeWindow('mask', 600,600)
+    # cv.imshow("img_dil",img_dil)
+    # cv.resizeWindow('img_dil', 600,600)
+    # cv.imshow("img_ero",img_ero)
+    # cv.resizeWindow('img_ero', 600,600)
+    # cv.waitKey(0)
 
     """# counting pumpkins """
     conts, hierarchy = cv.findContours(img_dil, cv.RETR_LIST ,cv.CHAIN_APPROX_SIMPLE)
