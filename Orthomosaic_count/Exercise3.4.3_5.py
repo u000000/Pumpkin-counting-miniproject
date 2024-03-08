@@ -84,16 +84,14 @@ class place_enum(Enum):
     
 
 
-def count_pumkins(img) -> int:
+def count_pumkins(img,tileXY,overlap) -> int:
 
     mean_color = np.array([225.69843634, 128.99106478, 176.34921817])
-
 
     img = cv.cvtColor(img,cv.COLOR_BGR2Lab)
     # Masking
     # mask = cv.inRange(img, lower_pumpkin, upper_pumpkin)
     mask = inEclidianDist(img, mean_color, 30)
-
 
     # Mask on original img
     # img_masked = cv.bitwise_and(img, img, mask=mask)
@@ -136,12 +134,14 @@ if __name__ == "__main__" :
     
     path = os.path.dirname(__file__)
     file = os.path.join(path,"../othomosaics/pumkin_filed.tif")
+    tileXY = 1000
+    overlap = 20
 
     last_tile = False
 
     number_of_pumpkins = 0
 
-    img_full = tile_maneger(file,1000,1000,20)
+    img_full = tile_maneger(file,tileXY,tileXY,overlap)
 
     while not last_tile:
         [tile,last_tile] = img_full.get_next_tile()
