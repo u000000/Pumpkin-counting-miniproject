@@ -143,7 +143,7 @@ if __name__ == "__main__" :
         img_array = np.transpose(tile, (1, 2, 0))
         img = cv.cvtColor(img_array,cv.COLOR_RGB2BGR)
 
-        number_of_pumpkins += count_pumkins(img,tileXY,tileXY,20)
+        number_of_pumpkins += count_pumkins(img,tileXY,tileXY,overlap)
     print("num of pumpkins")
     print(number_of_pumpkins)
 
