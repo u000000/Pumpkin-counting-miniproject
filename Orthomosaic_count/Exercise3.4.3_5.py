@@ -17,11 +17,12 @@ class tile_maneger:
         self.file :DatasetReader = rasterio.open(file_path)
         self.tile_width = tile_width
         self.tile_height = tile_height
+        self.overlap = overlap
         self.ncols, self.nrows = self.file.width, self.file.height
         self.xstep = self.tile_width - overlap
         self.ystep = self.tile_height - overlap
-        self.x = 0
-        self.y = 0
+        self.x = -overlap
+        self.y = -overlap
         print(f"width:{self.ncols}  height:{self.nrows}")
     
     def get_grid_shape(self) -> int:
@@ -50,7 +51,7 @@ class tile_maneger:
         if (self.x + self.xstep < self.ncols):
             self.x = self.x + self.xstep
         else:
-            self.x = 0
+            self.x = -self.overlap
             self.y = self.y + self.ystep
 
 
