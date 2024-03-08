@@ -85,7 +85,11 @@ class place_enum(Enum):
     
 
 
+<<<<<<< Updated upstream
 def count_pumkins(img,tileXY,overlap) -> int:
+=======
+def count_pumkins(img,overlab) -> int:
+>>>>>>> Stashed changes
 
     mean_color = np.array([225.69843634, 128.99106478, 176.34921817])
 
