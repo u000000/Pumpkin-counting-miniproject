@@ -67,8 +67,8 @@ def main():
     axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
     axis.set_xlabel("Red")
     axis.set_ylabel("Green")
-    # axis.set_zlabel("Blue")
-    plt.show()
+    axis.set_zlabel("Blue")
+    # plt.show()
     plt.savefig(path+'/worked_img/StandardDeviationOfColorValues.png')
     print('BRG done!')
 
@@ -87,26 +87,29 @@ def main():
     print(std)
 
     
-    color_mask = cv2.bitwise_and(img,img,mask=mask)
-    cv2.imwrite(path+'worked_img/annotated_pumkin_color.jpg', color_mask)
+    # color_mask = cv2.bitwise_and(img,img,mask=mask)
+    # cv2.imwrite(path+'worked_img/annotated_pumkin_color.jpg', color_mask)
 
-    # print(np.shape(img))
-    # print(np.shape(img[[mask]]))
-    # exit()
-    r, g, b = cv2.split(color_mask)
+    print(only_color.shape)
+
+    only_color_lab = cv2.cvtColor(only_color,cv2.COLOR_BGR2Lab)
+    
+    print(only_color_lab.shape)
+
+    only_color_lab = np.squeeze(only_color_lab)
+
+    print(only_color_lab.shape)
+
+    only_color_lab_rot = np.rot90(only_color_lab)
+    l, a, b = [only_color_lab_rot[0],only_color_lab_rot[1],only_color_lab_rot[2]]
 
     fig = plt.figure()
     axis = fig.add_subplot(1, 1, 1, projection="3d")
 
-    pixel_colors = color_mask.reshape((np.shape(color_mask)[0]*np.shape(color_mask)[1], 3))
-    norm = colors.Normalize(vmin=-1.,vmax=1.)
-    norm.autoscale(pixel_colors)
-    pixel_colors = norm(pixel_colors).tolist()
-
-    axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
-    axis.set_xlabel("Red")
-    axis.set_ylabel("Green")
-    # axis.set_zlabel("Blue")
+    axis.scatter(l.flatten(), a.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
+    axis.set_xlabel("l")
+    axis.set_ylabel("a")
+    axis.set_zlabel("b")
     plt.show()
 
 
