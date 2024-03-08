@@ -71,17 +71,6 @@ def inEclidianDist(img,mean,max_dist):
     eclidian_dist = np.sqrt(l*l + a*a + b*b)
 
     return cv.inRange(eclidian_dist,0,max_dist)
-
-class place_enum(Enum):
-    center = 0
-    top_left = 1
-    top = 2
-    top_right = 3
-    left = 4
-    right = 5
-    buttom_left = 6
-    buttom = 7
-    buttom_right = 8
     
 
 
