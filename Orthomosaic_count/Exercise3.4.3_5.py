@@ -85,12 +85,8 @@ class place_enum(Enum):
     
 
 
-<<<<<<< Updated upstream
-def count_pumkins(img,tileXY,overlap) -> int:
-=======
-def count_pumkins(img,overlab) -> int:
->>>>>>> Stashed changes
 
+def count_pumkins(img,overlab) -> int:
     mean_color = np.array([225.69843634, 128.99106478, 176.34921817])
 
     img = cv.cvtColor(img,cv.COLOR_BGR2Lab)
@@ -154,8 +150,7 @@ if __name__ == "__main__" :
         img_array = np.transpose(tile, (1, 2, 0))
         img = cv.cvtColor(img_array,cv.COLOR_RGB2BGR)
 
-        number_of_pumpkins += count_pumkins(img)
-
+        number_of_pumpkins += count_pumkins(img,20)
     print("num of pumpkins")
     print(number_of_pumpkins)
 
