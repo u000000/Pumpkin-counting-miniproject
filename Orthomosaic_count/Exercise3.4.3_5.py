@@ -43,7 +43,7 @@ class tile_maneger:
         if (self.y > self.nrows):
                 raise "no more tiles"
 
-        window = Window.from_slices(slice(self.y, self.y+self.tile_height),slice(self.x,self.x+self.tile_width))
+        window = Window(col_off=self.x,row_off=self.y,width= self.tile_width,height = self.tile_height)
         data = self.file.read(window=window,boundless=True)
 
         tile = [self.x/self.xstep,self.y/self.ystep]
@@ -86,7 +86,7 @@ class place_enum(Enum):
 
 
 
-def count_pumkins(img,overlab) -> int:
+def count_pumkins(img,xsize,ysize,overlab) -> int:
     mean_color = np.array([225.69843634, 128.99106478, 176.34921817])
 
     img = cv.cvtColor(img,cv.COLOR_BGR2Lab)
@@ -124,12 +124,16 @@ def count_pumkins(img,overlab) -> int:
         x0 = int(M['m10']/M['m00'])
         y0 = int(M['m01']/M['m00'])
         centers.append((x0, y0))
-        if cv.contourArea(cont) > 900:
-            number_of_pumpkins += 2
-        else:
-            number_of_pumpkins += 1
 
-    return number_of_pumpkins
+    if not len(centers):
+        return 0
+
+    filters_centers = [center for center in centers if center[0] > overlab and
+                                                       center[0] < xsize -overlab and
+                                                       center[1] > overlab and 
+                                                       center[1] < ysize -overlab]
+
+    return len(filters_centers)
 
 if __name__ == "__main__" :
     
@@ -150,7 +154,7 @@ if __name__ == "__main__" :
         img_array = np.transpose(tile, (1, 2, 0))
         img = cv.cvtColor(img_array,cv.COLOR_RGB2BGR)
 
-        number_of_pumpkins += count_pumkins(img,20)
+        number_of_pumpkins += count_pumkins(img,tileXY,tileXY,20)
     print("num of pumpkins")
     print(number_of_pumpkins)
 
